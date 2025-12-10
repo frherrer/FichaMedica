@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Citas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"></head>
+<body>
+<div class="container mt-3">
+  <h4>Citas del día</h4>
+  <table class="table">
+    <thead><tr><th>Hora</th><th>Paciente</th><th>Motivo</th></tr></thead>
+    <tbody>
+      <tr th:each="c : ${citas}">
+       <td th:text="${c.fechaHora != null ? #temporals.format(c.fechaHora, 'dd/MM/yyyy HH:mm') : '-'}">hora</td>
+
+
+        <td th:text="${c.patient.nombre} + ' ' + ${c.patient.apellido}">paciente</td>
+        <td th:text="${c.motivo}">motivo</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h5>Nueva cita</h5>
+  <form th:action="@{/secretaria/citas}" method="post" th:object="${newAppointment}">
+    <div class="row">
+      <div class="col-md-4 mb-2">
+        <label>Paciente</label>
+        <select th:field="*{patient.id}" class="form-control">
+          <option th:each="p : ${patients}" th:value="${p.id}" th:text="${p.nombre} + ' ' + ${p.apellido}"></option>
+        </select>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label>Fecha y hora</label>
+        <input type="datetime-local" th:field="*{fechaHora}" class="form-control"/>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label>Motivo</label>
+        <input th:field="*{motivo}" class="form-control"/>
+      </div>
+    </div>
+    <button class="btn btn-primary">Agendar</button>
+  </form>
+
+  <a href="/" class="btn btn-secondary mt-2">Volver</a>
+</div>
+</body>
+</html>
